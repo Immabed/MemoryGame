@@ -5,14 +5,14 @@
  */
 public class Tile {
 
-	private char value = ' ';
+	private String value = "";
 	private boolean isVisible = false;
 	
-	public Tile(char value) {
+	public Tile(String value) {
 		this.value = value;
 	}
 	
-	public char getValue() {
+	public String getValue() {
 		return value;
 	}
 	
