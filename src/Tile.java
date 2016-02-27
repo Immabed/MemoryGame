@@ -16,7 +16,7 @@ public class Tile {
 		return value;
 	}
 	
-	public boolean getVisibility() {
+	public boolean isVisible() {
 		return isVisible;
 	}
 	

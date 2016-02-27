@@ -128,7 +128,7 @@ public class MemoryGame {
 			output += String.format("%"+maxRowNumberWidth+"d", i+1);
 			output += verticalSeparator;
 			for (int j = 0; j < board[i].length; j++) {
-				if (board[i][j].getVisibility()) {
+				if (board[i][j].isVisible()) {
 					output += board[i][j].getValue();
 				}
 				else {
