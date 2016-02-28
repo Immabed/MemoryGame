@@ -226,6 +226,11 @@ public class MemoryGame {
 		return true;
 	}
 	
+	/**
+	 * Plays the memory game for a board with a certain width and height.
+	 * @param width width of game board (positive)
+	 * @param height height of game board (positive)
+	 */
 	public void play(int width, int height) {
 		generateBoard(width, height);
 		int turnCount = 0;
