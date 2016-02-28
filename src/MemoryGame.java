@@ -171,33 +171,34 @@ public class MemoryGame {
 	private int[] getLocationInput(Scanner keyboard) {
 		int[] location = new int[2];
 		while (true) {
-			System.out.print("Enter the location of the tile you wish to flip <column row>: ");
-			if (keyboard.hasNextInt()) {
-				location[1] = keyboard.nextInt();
-			}
-			else {
-				System.out.println("Please enter a valid location <column row>");
-				keyboard.nextLine();
-				continue;
-			}
+			System.out.print("Enter the location of the tile you wish to flip <row column>: ");
 			if (keyboard.hasNextInt()) {
 				location[0] = keyboard.nextInt();
 			}
 			else {
-				System.out.println("Please enter a valid location <column row>");
+				System.out.println("Please enter a valid location <row column>");
+				keyboard.nextLine();
+				continue;
+			}
+			if (keyboard.hasNextInt()) {
+				location[1] = keyboard.nextInt();
+			}
+			else {
+				System.out.println("Please enter a valid location <row column>");
+				keyboard.next();
 				keyboard.nextLine();
 				continue;
 			}
 			if (!(	  location[0] > 0 && location[0] <= board.length
 				  &&  location[1] > 0 && location[1] <= board[0].length)) {
-				System.out.printf("You entered an invalid location: %d %d%n",
-						location[1], location[0]);
+				System.out.printf("You entered an invalid location: %d,%d%n",
+						location[0], location[1]);
 				keyboard.nextLine();
 				continue;
 			}
 			if (board[location[0]-1][location[1]-1].isVisible()) {
-				System.out.printf("The tile at %d %d is already visible.%n",
-						location[1], location[0]);
+				System.out.printf("The tile at %d,%d is already visible.%n",
+						location[0], location[1]);
 				keyboard.nextLine();
 				continue;
 			}
@@ -252,8 +253,8 @@ public class MemoryGame {
 			// Flip second tile
 			System.out.printf("Turn %d: Pick second tile.%n", turnCount);
 			showBoard();
-			System.out.printf("You flipped %s at %d %d%n", 
-					tile1.getValue(), location1[1] + 1, location1[0] + 1);
+			System.out.printf("You flipped %s at %d,%d%n", 
+					tile1.getValue(), location1[0] + 1, location1[1] + 1);
 			int[] location2 = getLocationInput(keyboard);
 			Tile tile2 = board[location2[0]][location2[1]];
 			tile2.reveal();
@@ -267,9 +268,9 @@ public class MemoryGame {
 			}
 			System.out.printf("Turn %d: %n", turnCount);
 			showBoard();
-			System.out.printf("You flipped %s at %d %d and %s at %d %d%n", 
-					tile1.getValue(), location1[1] + 1, location1[0] + 1,
-					tile2.getValue(), location2[1] + 1, location2[0] + 1);
+			System.out.printf("You flipped %s at %d,%d and %s at %d,%d%n", 
+					tile1.getValue(), location1[0] + 1, location1[1] + 1,
+					tile2.getValue(), location2[0] + 1, location2[1] + 1);
 			if (result) {
 				System.out.print("Congratulations, your tiles match!");
 			}
@@ -294,7 +295,7 @@ public class MemoryGame {
 	
 	public static void main(String[] args) {
 		MemoryGame game = new MemoryGame();
-		game.play(4, 4);
+		game.play(5, 4);
 	}
 
 }
