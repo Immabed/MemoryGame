@@ -165,10 +165,10 @@ public class MemoryGame {
 	
 	/**
 	 * Gets a valid location input from the user.
-	 * @return
+	 * @return An array where the first element is the row and the second element
+	 * is the column of the intended tile.
 	 */
-	private int[] getLocationInput() {
-		Scanner keyboard = new Scanner(System.in);
+	private int[] getLocationInput(Scanner keyboard) {
 		int[] location = new int[2];
 		while (true) {
 			System.out.print("Enter the location of the tile you wish to flip <column row>: ");
@@ -177,6 +177,7 @@ public class MemoryGame {
 			}
 			else {
 				System.out.println("Please enter a valid location <column row>");
+				keyboard.nextLine();
 				continue;
 			}
 			if (keyboard.hasNextInt()) {
@@ -184,26 +185,103 @@ public class MemoryGame {
 			}
 			else {
 				System.out.println("Please enter a valid location <column row>");
+				keyboard.nextLine();
 				continue;
 			}
-			if (	location[0] > 0 && location[0] <= board.length
-				&&  location[1] > 0 && location[1] <= board[0].length) {
+			if (!(	  location[0] > 0 && location[0] <= board.length
+				  &&  location[1] > 0 && location[1] <= board[0].length)) {
 				System.out.printf("You entered an invalid location: %d %d%n",
 						location[1], location[0]);
+				keyboard.nextLine();
 				continue;
 			}
 			if (board[location[0]-1][location[1]-1].isVisible()) {
 				System.out.printf("The tile at %d %d is already visible.%n",
 						location[1], location[0]);
+				keyboard.nextLine();
 				continue;
 			}
+			keyboard.nextLine();
 			break;	
 		}
-		keyboard.close();
 		// correct for 0 indexing of board, but 1 indexing on visual.
 		location[0] = location[0] - 1;
 		location[1] = location[1] - 1;
 		return location;
+	}
+	
+	/**
+	 * Checks if all tiles in board are visible.
+	 * @return true if all tiles in board are visible. If any tile is hidden, 
+	 * returns false.
+	 */
+	private boolean areAllVisible() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (!board[i][j].isVisible()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public void play(int width, int height) {
+		generateBoard(width, height);
+		int turnCount = 0;
+		Scanner keyboard = new Scanner(System.in);
+		do {
+			// Increment turn counter
+			turnCount++;
+			// Clear the console
+			System.out.print(repeatString("\n", 20));
+			// Flip first tile
+			System.out.printf("Turn %d: Pick first tile.%n", turnCount);
+			showBoard();
+			int[] location1 = getLocationInput(keyboard);
+			Tile tile1 = board[location1[0]][location1[1]];
+			tile1.reveal();
+			
+			// Clear the console
+			System.out.print(repeatString("\n", 20));
+			// Flip second tile
+			System.out.printf("Turn %d: Pick second tile.%n", turnCount);
+			showBoard();
+			System.out.printf("You flipped %s at %d %d%n", 
+					tile1.getValue(), location1[1] + 1, location1[0] + 1);
+			int[] location2 = getLocationInput(keyboard);
+			Tile tile2 = board[location2[0]][location2[1]];
+			tile2.reveal();
+			
+			// Clear the console
+			System.out.print(repeatString("\n", 20));
+			// Show result
+			boolean result = false;
+			if (tile1.getValue().equals(tile2.getValue())) {
+				result = true;
+			}
+			System.out.printf("Turn %d: %n", turnCount);
+			showBoard();
+			System.out.printf("You flipped %s at %d %d and %s at %d %d%n", 
+					tile1.getValue(), location1[1] + 1, location1[0] + 1,
+					tile2.getValue(), location2[1] + 1, location2[0] + 1);
+			if (result) {
+				System.out.print("Congratulations, your tiles match!");
+			}
+			else {
+				System.out.print("Try again, your tiles don't match.");
+				tile1.hide();
+				tile2.hide();
+			}
+			keyboard.nextLine();
+			
+		} while (!areAllVisible());
+		
+		// Clear the console
+		System.out.print(repeatString("\n", 20));
+		// Output Results
+		showBoard();
+		System.out.printf("You completed the game in %d turns!", turnCount);
 	}
 	
 	
@@ -211,7 +289,7 @@ public class MemoryGame {
 	
 	public static void main(String[] args) {
 		MemoryGame game = new MemoryGame();
-		game.showBoard();
+		game.play(4, 4);
 	}
 
 }
