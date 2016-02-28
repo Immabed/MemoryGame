@@ -289,7 +289,7 @@ public class MemoryGame {
 			System.out.print(repeatString("\n", 20));
 			// Show result
 			boolean result = false;
-			if (tile1.getValue().equals(tile2.getValue())) {
+			if (tile1.equals(tile2)) {
 				result = true;
 			}
 			System.out.printf("Turn %d: %n", turnCount);
