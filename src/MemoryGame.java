@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * 
@@ -104,6 +105,7 @@ public class MemoryGame {
 		String horizontalSeparator = "-";
 		String verticalSeparator = "|";
 		String hiddenTile = "*";
+		
 		// Get width values for formatting reasons
 		int tileWidth = board[0][0].getValue().length();
 		int maxColumnNumberWidth = Integer.toString(board[0].length).length();
@@ -111,6 +113,8 @@ public class MemoryGame {
 		int tileSpacing = displayedColumnNumberWidth + 1 - tileWidth;
 		int maxRowNumberWidth = Integer.toString(board.length).length();
 		int rowNumberSeparatorWidth = verticalSeparator.length();
+		
+		
 		// Column numbers
 		String output = repeatString(" ", maxRowNumberWidth + rowNumberSeparatorWidth);
 		for (int i = 0; i < board[0].length; i++) {
@@ -118,11 +122,13 @@ public class MemoryGame {
 			output += " ";
 		}
 		output += "\n";
+		
 		// Separator
 		output += repeatString(" ", maxRowNumberWidth + rowNumberSeparatorWidth);
 		output += repeatString(horizontalSeparator, 
 				board[0].length * (displayedColumnNumberWidth + 1));
 		output += "\n";
+		
 		// Rows
 		for (int i = 0; i < board.length; i++) {
 			output += String.format("%"+maxRowNumberWidth+"d", i+1);
@@ -156,6 +162,51 @@ public class MemoryGame {
 		// Creates a string with s repeated n times.
 		return String.format("%0" + n + "d", 0).replace("0",s);
 	}
+	
+	/**
+	 * Gets a valid location input from the user.
+	 * @return
+	 */
+	private int[] getLocationInput() {
+		Scanner keyboard = new Scanner(System.in);
+		int[] location = new int[2];
+		while (true) {
+			System.out.print("Enter the location of the tile you wish to flip <column row>: ");
+			if (keyboard.hasNextInt()) {
+				location[1] = keyboard.nextInt();
+			}
+			else {
+				System.out.println("Please enter a valid location <column row>");
+				continue;
+			}
+			if (keyboard.hasNextInt()) {
+				location[0] = keyboard.nextInt();
+			}
+			else {
+				System.out.println("Please enter a valid location <column row>");
+				continue;
+			}
+			if (	location[0] > 0 && location[0] <= board.length
+				&&  location[1] > 0 && location[1] <= board[0].length) {
+				System.out.printf("You entered an invalid location: %d %d%n",
+						location[1], location[0]);
+				continue;
+			}
+			if (board[location[0]-1][location[1]-1].isVisible()) {
+				System.out.printf("The tile at %d %d is already visible.%n",
+						location[1], location[0]);
+				continue;
+			}
+			break;	
+		}
+		keyboard.close();
+		// correct for 0 indexing of board, but 1 indexing on visual.
+		location[0] = location[0] - 1;
+		location[1] = location[1] - 1;
+		return location;
+	}
+	
+	
 	
 	
 	public static void main(String[] args) {
