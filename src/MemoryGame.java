@@ -100,7 +100,27 @@ public class MemoryGame {
 	/**
 	 * Displays the board in the console.
 	 */
-	private void showBoard() {
+	private void showBoard(int[] ... locations) {
+		// Get location values from locations for special locations
+		int[][] specialLocationsTemp = new int[locations.length][2];
+		int specialIndex = 0;
+		for (int i = 0; i < locations.length; i++) {
+			if (locations[i].length == 2) {
+				if (locations[i][0] >= 0 && locations[i][0] < board.length &&
+					locations[i][1] >= 0 && locations[i][1] < board[0].length) {
+					specialLocationsTemp[specialIndex][0] = locations[i][0];
+					specialLocationsTemp[specialIndex][1] = locations[i][1];
+					specialIndex ++;
+				}
+					
+			}
+		}
+		int[][] specialLocations = new int[specialIndex][2];
+		for (int i = 0; i < specialLocations.length; i++) {
+			specialLocations[i] = specialLocationsTemp[i];
+		}
+		
+		
 		// Icon values
 		String horizontalSeparator = "-";
 		String verticalSeparator = "|";
@@ -140,7 +160,13 @@ public class MemoryGame {
 				else {
 					output += repeatString(hiddenTile, board[i][j].getValue().length());
 				}
-				output += repeatString(" ", tileSpacing);
+				String tileSpace = " ";
+				for (int k = 0; k < specialLocations.length; k++) {
+					if (i == specialLocations[k][0] && j == specialLocations[k][1]) {
+						tileSpace = ">";
+					}
+				}
+				output += repeatString(tileSpace, tileSpacing);
 			}
 			output += "\n";
 		}
@@ -252,7 +278,7 @@ public class MemoryGame {
 			System.out.print(repeatString("\n", 20));
 			// Flip second tile
 			System.out.printf("Turn %d: Pick second tile.%n", turnCount);
-			showBoard();
+			showBoard(location1);
 			System.out.printf("You flipped %s at %d,%d%n", 
 					tile1.getValue(), location1[0] + 1, location1[1] + 1);
 			int[] location2 = getLocationInput(keyboard);
@@ -267,7 +293,7 @@ public class MemoryGame {
 				result = true;
 			}
 			System.out.printf("Turn %d: %n", turnCount);
-			showBoard();
+			showBoard(location1, location2);
 			System.out.printf("You flipped %s at %d,%d and %s at %d,%d%n", 
 					tile1.getValue(), location1[0] + 1, location1[1] + 1,
 					tile2.getValue(), location2[0] + 1, location2[1] + 1);
