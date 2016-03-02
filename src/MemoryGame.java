@@ -2,7 +2,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * 
+ * A playable memory tile game. Stores a game board, and has proper game logic.
  * @author Brady Coles
  *
  */
