@@ -321,7 +321,7 @@ public class MemoryGame {
 	
 	public static void main(String[] args) {
 		MemoryGame game = new MemoryGame();
-		game.play(5, 4);
+		game.play(4, 4);
 	}
 
 }
